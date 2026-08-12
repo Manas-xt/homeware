@@ -1,0 +1,402 @@
+/* ===========================================================
+   Lustre Homeware — design tokens
+   Palette: bone #F1ECE3, ink #2A2420, brass #B08D4F -> #E8C77E,
+            bottle #2F3B32, greige #C9BFAF
+   Type: Fraunces (display) / Inter (body + utility)
+   Signature: the "lustre sweep" — a soft brass highlight that
+   drifts across the hero and sweeps product images on hover,
+   echoing light moving across a polished surface.
+   =========================================================== */
+
+:root {
+  --bone: #f1ece3;
+  --bone-dim: #e7ddce;
+  --ink: #2a2420;
+  --ink-soft: #55493f;
+  --brass-1: #a67c3d;
+  --brass-2: #e8c77e;
+  --bottle: #2f3b32;
+  --greige: #c9bfaf;
+  --white: #fffdfa;
+
+  --font-display: 'Fraunces', 'Iowan Old Style', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --shadow-card: 0 1px 2px rgba(42, 36, 32, 0.06), 0 8px 24px rgba(42, 36, 32, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass-1);
+  outline-offset: 3px;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(241, 236, 227, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--greige);
+}
+
+.site-header__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  text-decoration: none;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+.wordmark__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brass-2), var(--brass-1));
+  color: var(--white);
+  font-size: 14px;
+}
+
+.site-nav {
+  display: flex;
+  gap: 24px;
+  margin-right: auto;
+  font-size: 14px;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+}
+
+.search-field input {
+  width: 220px;
+  padding: 9px 14px;
+  border: 1px solid var(--greige);
+  border-radius: 999px;
+  background: var(--white);
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.search-field input::placeholder {
+  color: var(--ink-soft);
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--ink);
+  color: var(--bone);
+  padding: 96px 24px 88px;
+  /* curated hero image (uses a product image as fallback) */
+  background-image: linear-gradient(rgba(10,10,10,0.45), rgba(10,10,10,0.45)), url('/images/aurelia-lamp.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.hero__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 12px;
+  color: var(--brass-2);
+  margin: 0 0 20px;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1.12;
+  margin: 0 0 24px;
+}
+
+.hero__copy {
+  font-size: 17px;
+  color: var(--greige);
+  max-width: 480px;
+  margin: 0 auto 32px;
+}
+
+.hero__cta {
+  display: inline-block;
+  padding: 13px 30px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brass-2), var(--brass-1));
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.hero__cta:hover {
+  filter: brightness(1.05);
+}
+
+.hero__sheen {
+  position: absolute;
+  inset: -40% -20%;
+  z-index: 1;
+  background: radial-gradient(
+    circle at 30% 40%,
+    rgba(232, 199, 126, 0.22),
+    transparent 55%
+  );
+  animation: drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from {
+    transform: translate(-4%, -2%) scale(1);
+  }
+  to {
+    transform: translate(4%, 3%) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__sheen {
+    animation: none;
+  }
+}
+
+/* ---------- Catalog ---------- */
+
+.catalog {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 56px 24px 96px;
+}
+
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.pill {
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--greige);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.pill:hover {
+  border-color: var(--brass-1);
+  color: var(--ink);
+}
+
+.pill--active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bone);
+}
+
+.state-message {
+  color: var(--ink-soft);
+  padding: 48px 0;
+  text-align: center;
+}
+
+.state-message--error {
+  color: #a13a2e;
+}
+
+/* ---------- Product grid ---------- */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 28px;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swatch--brass {
+  background: linear-gradient(160deg, #d9b876, #a67c3d 60%, #6f5427);
+}
+.swatch--clay {
+  background: linear-gradient(160deg, #d8c4a8, #b08c62 60%, #7a5f3e);
+}
+.swatch--linen {
+  background: linear-gradient(160deg, #e9e2d3, #c9bfaf 65%, #a79c86);
+}
+.swatch--porcelain {
+  background: linear-gradient(160deg, #f4efe6, #d9d0bf 65%, #b7ab93);
+}
+
+.product-card__monogram {
+  font-family: var(--font-display);
+  font-size: 48px;
+  color: rgba(255, 253, 250, 0.85);
+}
+
+.product-card__sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.35) 48%,
+    transparent 56%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+
+.product-card:hover .product-card__sheen {
+  transform: translateX(120%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card__sheen {
+    transition: none;
+    display: none;
+  }
+}
+
+.product-card__body {
+  padding-top: 14px;
+}
+
+.product-card__category {
+  margin: 0 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brass-1);
+}
+
+.product-card__name {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.product-card__material {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.product-card__price {
+  margin: 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  border-top: 1px solid var(--greige);
+  padding: 32px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .site-header__inner {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .site-nav {
+    order: 3;
+    margin-right: 0;
+  }
+  .search-field input {
+    width: 100%;
+  }
+  .hero {
+    padding: 72px 20px 64px;
+  }
+}
