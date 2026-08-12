@@ -71,6 +71,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                    cd /home/manas/homeware
+
                     docker compose \
                         -f docker-compose.prod.yml \
                         pull
@@ -85,6 +87,8 @@ pipeline {
         stage('Verify') {
             steps {
                 sh '''
+                    cd /home/manas/homeware
+
                     docker compose \
                         -f docker-compose.prod.yml \
                         ps
