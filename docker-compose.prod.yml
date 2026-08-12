@@ -1,0 +1,19 @@
+services:
+
+  backend:
+    image: manaskumar1/homeware-backend:latest
+    container_name: homeware-backend
+    env_file:
+      - ./backend/.env
+    expose:
+      - "8080"
+    restart: unless-stopped
+
+  frontend:
+    image: manaskumar1/homeware-frontend:latest
+    container_name: homeware-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    restart: unless-stopped
