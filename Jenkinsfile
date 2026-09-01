@@ -1,12 +1,13 @@
 pipeline {
 
-    agent {
-        label 'worker1'
-    }
+    agent any
 
     environment {
-        BACKEND_IMAGE = 'manaskumar1/homeware-backend'
+        BACKEND_IMAGE  = 'manaskumar1/homeware-backend'
         FRONTEND_IMAGE = 'manaskumar1/homeware-frontend'
+        WORKER_HOST    = '20.40.58.197'
+        WORKER_USER    = 'manas'
+        APP_DIR        = '/home/manas/homeware'
     }
 
     stages {
@@ -40,8 +41,9 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Push Images') {
             steps {
+
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-credentials',
@@ -49,6 +51,7 @@ pipeline {
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
+
                     sh '''
                         echo "$DOCKER_PASSWORD" | docker login \
                             --username "$DOCKER_USERNAME" \
@@ -66,44 +69,54 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Worker') {
             steps {
-                sh '''
-                    cd /home/manas/homeware
+                sshagent(['worker-ssh-key']) {
 
-                    docker compose \
-                        -f docker-compose.prod.yml \
-                        pull
-
-                    docker compose \
-                        -f docker-compose.prod.yml \
-                        up -d
-                '''
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no \
+                            ${WORKER_USER}@${WORKER_HOST} \
+                            "cd ${APP_DIR} && \
+                             docker compose -f docker-compose.prod.yml pull && \
+                             docker compose -f docker-compose.prod.yml up -d"
+                    '''
+                }
             }
         }
 
-        stage('Verify') {
+        stage('Verify Deployment') {
             steps {
-                sh '''
-                    cd /home/manas/homeware
+                sshagent(['worker-ssh-key']) {
 
-                    docker compose \
-                        -f docker-compose.prod.yml \
-                        ps
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no \
+                            ${WORKER_USER}@${WORKER_HOST} \
+                            "cd ${APP_DIR} && \
+                             docker compose -f docker-compose.prod.yml ps"
+                    '''
 
-                    curl --fail http://localhost/
-                '''
+                    sh '''
+                        sleep 10
+
+                        curl --fail \
+                            --max-time 10 \
+                            http://${WORKER_HOST}/
+                    '''
+                }
             }
         }
     }
 
     post {
+
         success {
             echo 'CI/CD deployment successful.'
+            echo 'The new version is live on the worker server.'
         }
 
         failure {
             echo 'CI/CD deployment failed.'
+            echo 'Check the Jenkins console output for details.'
         }
     }
 }
