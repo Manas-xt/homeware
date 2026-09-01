@@ -42,7 +42,6 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-credentials',
@@ -50,7 +49,6 @@ pipeline {
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
-
                     sh '''
                         echo "$DOCKER_PASSWORD" | docker login \
                             --username "$DOCKER_USERNAME" \
@@ -93,15 +91,13 @@ pipeline {
                         -f docker-compose.prod.yml \
                         ps
 
-                    curl --fail \
-                        http://localhost:3000/api/health
+                    curl --fail http://localhost/
                 '''
             }
         }
     }
 
     post {
-
         success {
             echo 'CI/CD deployment successful.'
         }
