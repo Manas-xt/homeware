@@ -63,7 +63,7 @@ export default function App() {
       </main>
 
       <footer className="site-footer" id="about">
-        <p>Lustre Homeware — hand-finished pieces, made to be lived with.</p>
+        <p>Lustre Homeware — hand-finished pieces, made to be lived .</p>
       </footer>
     </>
   );
